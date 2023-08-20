@@ -11,6 +11,9 @@ import os
 import pytesseract
 from pdf2image import convert_from_path
 
+# Set the TESSDATA_PREFIX environment variable
+os.environ['TESSDATA_PREFIX'] = '/usr/local/share/'
+
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
@@ -51,7 +54,7 @@ def launch_python_file():
         images = convert_from_path(file_name)
         all_text = ""
         for i, image in enumerate(images):
-            text = pytesseract.image_to_string(image)
+            text = pytesseract.image_to_string(image, config='--tessdata-dir "/path/to/tessdata"')
             all_text += text
 
         # Print the extracted text
