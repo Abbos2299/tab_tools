@@ -8,7 +8,8 @@ import requests
 import time
 import urllib.parse
 import os
-import subprocess
+import pytesseract
+from pdf2image import convert_from_path
 
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
@@ -46,23 +47,23 @@ def launch_python_file():
 
         print(f'File "{file_name}" downloaded successfully')
 
-        # Process the PDF file using ocrmypdf
-        processed_file_name = f'processed_{file_name}'
-        subprocess.run(['ocrmypdf', file_name, processed_file_name])
+        # Process the downloaded file with Pytesseract
+        images = convert_from_path(file_name)
+        all_text = ""
+        for i, image in enumerate(images):
+            text = pytesseract.image_to_string(image)
+            all_text += text
 
-        # Read the processed PDF file and extract the text
-        with open(processed_file_name, 'rb') as f:
-            processed_pdf_content = f.read()
+        # Print the extracted text
+        print("Extracted text from PDF:")
+        print(all_text)
 
-        # Convert the processed PDF content to text
-        text = processed_pdf_content.decode('utf-8')
+        # Wait for 20 seconds
+        time.sleep(20)
 
-        print('Text extracted from PDF:', text)
-
-        # Delete the processed files
+        # Delete the file
         os.remove(file_name)
-        os.remove(processed_file_name)
-        print(f'Files "{file_name}" and "{processed_file_name}" deleted successfully')
+        print(f'File "{file_name}" deleted successfully')
 
         # Check if a broker name was found
         if broker_name:
@@ -75,8 +76,7 @@ def launch_python_file():
             load_doc_ref = loads_ref.document(file_name)
 
             load_doc_ref.set({
-                'Broker Company Name': broker_name,
-                'Extracted Text': text
+                'Broker Company Name': broker_name
             })
 
             print(f'Firestore document created for Load "{file_name}" with Broker Company Name: {broker_name}')
