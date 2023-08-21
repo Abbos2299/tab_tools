@@ -60,7 +60,7 @@ def launch_python_file():
 
         # Print the extracted text
         print("Text Exctracted")
-        #print(all_text)
+        print(all_text)
 
         # List of broker companies
         broker_companies = [
