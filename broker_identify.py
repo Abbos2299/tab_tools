@@ -59,8 +59,8 @@ def launch_python_file():
             all_text += text
 
         # Print the extracted text
-        print("Extracted text from PDF:")
-        print(all_text)
+        print("Text Exctracted")
+        #print(all_text)
 
         # List of broker companies
         broker_companies = [
