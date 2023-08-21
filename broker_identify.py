@@ -15,6 +15,8 @@ app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
 
+# Set the TESSDATA_PREFIX environment variable
+os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata'
 
 @app.route('/launch', methods=['GET'])
 def launch_python_file():
