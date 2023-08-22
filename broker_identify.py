@@ -1,3 +1,4 @@
+import subprocess
 from flask import Flask, request
 import firebase_admin
 from firebase_admin import credentials
@@ -74,7 +75,7 @@ def launch_python_file():
 "AM Transport ",
 "American Group",
 "American Sugar",
-"American Transportation",
+"American Transport Group",
 "Amsino",
 "Amstan Logistics",
 "ArcBest Corp",
@@ -135,7 +136,7 @@ def launch_python_file():
 "Direct Connect Logistix",
 "Direct Connect Transport",
 "DSV A/S",
-"Dupré Logistics",
+"Dupre Logistics",
 "DYNAMIC LOGISTIX",
 "Dynamo Freight",
 "Ease Logistics",
@@ -143,16 +144,16 @@ def launch_python_file():
 "Echo Global",
 "Edge Logistics",
 "ELISqutions",
-"ELIT Transit Solutions",
-"EMERGE TECH",
-"England Logistics",
+"ELITE TRANSITSOLU",
+"emergemarket",
+"englandlogistics",
 "eShipping",
 "Evans Delivery",
 "EVE INTERNATIONAL",
 "everest",
 "EXPRESS LOGISTICS",
 "Fastmore",
-"FEDEX CUSTOM FREIGHT",
+"FEDEX CUSTOM CRITICAL",
 "Fifth Wheel Freight",
 "FitzMark",
 "FLS Transportation",
@@ -224,7 +225,7 @@ def launch_python_file():
 "ODW Logistics",
 "Old Frontier Family",
 "OpenRoad Transportation",
-"Packer Transportation",
+"Packer Transponallun",
 "PAM Transport",
 "PATHMARK TRANSPORTATION",
 "Patterson Companies",
@@ -237,14 +238,14 @@ def launch_python_file():
 "PINK PANTHERS",
 "PLS",
 "Priority 1",
-"R&R Express",
+"R&R FREIGHT",
 "R2 Logistics",
 "Radiant Logistics",
 "RB Humphreys",
 "Red Classic",
 "Redwood",
 "REED TRANSPORT ",
-"Reliable Transportation",
+"RTS",
 "RFX",
 "RJ Logistics",
 "RJ S",
@@ -264,13 +265,13 @@ def launch_python_file():
 "Scotlynn USA Division",
 "Sim Ie Lo istics,LLC",
 "Spartan Logistics",
-"SPI Logistics",
+"SP1 Logistics",
 "Spirit Logistics",
-"Spot Inc",
+"spotinc",
 "ST Freight",
 "Starland Global Logistics",
 "Steam Logistics",
-"Summit Eleven",
+"Summit E1even",
 "Sunrise Logistics",
 "Surge Transportation",
 "Synchrogistics",
@@ -325,6 +326,66 @@ def launch_python_file():
 
         # Find the most used broker company
         most_used_broker = max(broker_counts, key=broker_counts.get)
+
+        # Correct the identified broker company names if needed
+        if most_used_broker == "J .B. Hunt":
+            most_used_broker = "J. B. Hunt Transportation"
+            subprocess.call(["python", "jbhunt.py"])
+            
+        elif most_used_broker == "Priority 1":
+            most_used_broker = "Priority 1 Logistics"
+
+        elif most_used_broker == "G02 EXPRESS":
+            most_used_broker = "GO2 EXPRESS"
+            
+        elif most_used_broker == "NTG":
+            most_used_broker = "Nolan Transportation Group, LLC" 
+
+        elif most_used_broker == "SCAN GLOBAL":
+            most_used_broker = "SCAN GLOBAL LOGISTICS"
+
+        elif most_used_broker == "everest":
+            most_used_broker = "EVEREST transportation systems"
+
+        elif most_used_broker == "PLS":
+            most_used_broker = "PLS Logistics Services"
+
+        elif most_used_broker == "LIBERTY":
+            most_used_broker = "LIBERTY COMMERCIAL"
+
+        elif most_used_broker == "Redwood":
+            most_used_broker = "REDWOOD"
+
+        elif most_used_broker == "NORTH EAST LOGISTICS":
+            most_used_broker = "NORTHEAST LOGISTICS"
+
+        elif most_used_broker == "TransAm Logistics":
+            most_used_broker = "TransAm Logistics, Inc"
+
+        elif most_used_broker == "ELISqutions":
+            most_used_broker = "ELI Solutions, LLC"
+
+        elif most_used_broker == "freedomtransusa":
+            most_used_broker = "Freedom Trans USA, LLC"
+
+        elif most_used_broker == "C&L":
+            most_used_broker = "C & L LOGISTICS, INC."
+
+        elif most_used_broker == "GulfRelay":
+            most_used_broker = "Gulf Rlay Logistics, LLC"
+
+        elif most_used_broker == "axlelogistics":
+            most_used_broker = "AXLE LOGISTICS, LLC"
+
+        elif most_used_broker == "Achest":
+            most_used_broker = "ArcBest Dedicated, LLC"
+            
+        elif most_used_broker == "Sim Ie Lo istics,LLC":
+            most_used_broker = "Simple Logistics, LLC"
+
+        elif most_used_broker == "RJ S":
+            most_used_broker = "RJS"                                                            
+
         print("Most used broker company:", most_used_broker)
 
         # Wait for 20 seconds
@@ -337,7 +398,6 @@ def launch_python_file():
         print('No files found in the folder')
 
     return 'Success'
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
