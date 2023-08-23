@@ -1,4 +1,5 @@
 import subprocess
+import sys
 from flask import Flask, request
 import firebase_admin
 from firebase_admin import credentials
@@ -330,7 +331,7 @@ def launch_python_file():
         # Correct the identified broker company names if needed
         if most_used_broker == "J .B. Hunt":
             most_used_broker = "J. B. Hunt Transportation"
-            subprocess.call(["/usr/bin/python", "jbhunt.py"])
+            subprocess.call([sys.executable, "jbhunt.py"])
             
         elif most_used_broker == "Priority 1":
             most_used_broker = "Priority 1 Logistics"
