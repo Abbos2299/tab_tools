@@ -15,8 +15,7 @@ from pdf2image import convert_from_path
 import re
 
 app = Flask(__name__)
-cred = credentials.Certificate(
-    'tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
+cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
 
 
@@ -62,7 +61,7 @@ def launch_python_file():
 
         # Print the extracted text
         print("Text Exctracted")
-        print(all_text)
+        #print(all_text)
 
         # List of broker companies
         broker_companies = [
@@ -328,10 +327,12 @@ def launch_python_file():
         # Find the most used broker company
         most_used_broker = max(broker_counts, key=broker_counts.get)
 
+        print("Most used broker company:", most_used_broker)
+
         # Correct the identified broker company names if needed
         if most_used_broker == "J .B. Hunt":
             most_used_broker = "J. B. Hunt Transportation"
-            subprocess.call([sys.executable, "jbhunt.py"])
+            subprocess.call([sys.executable, "jbhunt.py", user_uid, most_used_broker, file_name])
             
         elif most_used_broker == "Priority 1":
             most_used_broker = "Priority 1 Logistics"
@@ -419,8 +420,6 @@ def launch_python_file():
 
         elif most_used_broker == "American Transport Group":
             most_used_broker = "American Transport Group, LLC"                                                                                                       
-
-        print("Most used broker company:", most_used_broker)
 
         # Wait for 20 seconds
         time.sleep(3)
