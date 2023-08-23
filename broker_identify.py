@@ -330,7 +330,7 @@ def launch_python_file():
         # Correct the identified broker company names if needed
         if most_used_broker == "J .B. Hunt":
             most_used_broker = "J. B. Hunt Transportation"
-            subprocess.call(["python", "jbhunt.py"])
+            subprocess.call(["jbhunt.py"])
             
         elif most_used_broker == "Priority 1":
             most_used_broker = "Priority 1 Logistics"
