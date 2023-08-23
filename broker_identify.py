@@ -384,7 +384,40 @@ def launch_python_file():
             most_used_broker = "Simple Logistics, LLC"
 
         elif most_used_broker == "RJ S":
-            most_used_broker = "RJS"                                                            
+            most_used_broker = "RJS"
+
+        elif most_used_broker == "FEDEX CUSTOM CRITICAL":
+            most_used_broker = "FEDEX CUSTOM CRITICAL"
+
+        elif most_used_broker == "englandlogistics":
+            most_used_broker = "englandlogistics"
+
+        elif most_used_broker == "Summit E1even":
+            most_used_broker = "Summit Eleven Inc"
+
+        elif most_used_broker == "ELITE TRANSITSOLU":
+            most_used_broker = "ELITE TRANSIT"
+
+        elif most_used_broker == "RTS":
+            most_used_broker = "Reliable Transportation Soiutions"
+
+        elif most_used_broker == "spotinc":
+            most_used_broker = "SPOT"
+
+        elif most_used_broker == "emergemarket":
+            most_used_broker = "EMERGET ECH LLC" 
+
+        elif most_used_broker == "R&R FREIGHT":
+            most_used_broker = "R&R Freight Logistics, LLC"
+
+        elif most_used_broker == "Packer Transponallun":
+            most_used_broker = "Packer Transportation & Logistics"
+
+        elif most_used_broker == "SP1 Logistics":
+            most_used_broker = "SPI Logistics"
+
+        elif most_used_broker == "American Transport Group":
+            most_used_broker = "American Transport Group, LLC"                                                                                                       
 
         print("Most used broker company:", most_used_broker)
 
