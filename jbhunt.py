@@ -83,14 +83,7 @@ def apply_regex_rules(text):
 
 def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_times, delivery_times):
     # Get the loads collection for the user
-    loads_ref = db.collection('users').document(user_uid).collection('loads')
-
-    # Get the latest load document number
-    latest_load = loads_ref.order_by('document_number', direction=firestore.Query.DESCENDING).limit(1).get()
-    if latest_load:
-        document_number = latest_load[0].to_dict()['document_number'] + 1
-    else:
-        document_number = 1
+    loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
     # Create a new load document
     load_doc_ref = loads_ref.document(timestamp)
@@ -109,19 +102,10 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'LoadMiles': load_miles,
         'PickUp': pick_up,
         'PickUpTime': pick_up_t,
-       })
-    # Save each consignee separately
-    for i, consignee_time in enumerate(consignee_times, start=1):
-        consignee_doc_ref = load_doc_ref.collection('Consignees').document(f'Consignee{i}')
-        consignee_doc_ref.set({
-            'Consignee': consignee_time,
-        })
-    # Save each delivery time separately
-    for i, delivery_time in enumerate(delivery_times, start=1):
-        delivery_doc_ref = load_doc_ref.collection('DeliveryTimes').document(f'DeliveryTime{i}')
-        delivery_doc_ref.set({
-            'DeliveryTime': delivery_time,
-        })
+        'Consignees': consignee,
+        'DeliveryTimes': delivery_times,
+        'DocumentNumber': document_number,
+    })
 
 # Extract text from the PDF
 pdf_text = extract_text_from_pdf(file_name)
