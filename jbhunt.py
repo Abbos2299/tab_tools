@@ -63,7 +63,7 @@ def apply_regex_rules(text):
 
     consignee_regex = r'Consignee # (\d+)\n(.+?)\n(.+?)\n(.+?)\n'
     consignees = re.findall(consignee_regex, text, re.DOTALL)
-    consignee_times = ['\n'.join(consignee[1:]) for consignee in consignees]
+    consignee_location = ['\n'.join(consignee[1:]) for consignee in consignees]
 
     delivery_info = re.findall(r'Delivery\n(.+)', text)
     delivery_times = delivery_info[:-1]  # Exclude the last occurrence
@@ -76,14 +76,39 @@ def apply_regex_rules(text):
         load_miles.group(1) if load_miles else None,
         pick_up,
         pick_up_t,
-        consignee_times,
+        consignee_location,
         delivery_times,
 
     )
 
-def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_times, delivery_times):
-    # Get the loads collection for the user
-    loads_ref = db.collection('users').document(user_uid).collection('Loads')
+def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
+    print(load_number)
+    print(rate)
+    print(broker_email)
+    print(load_miles)
+    print(pick_up)
+    print(pick_up_t)
+
+    for i, time in enumerate(consignee_location, start=1):
+        print(f"Consignee #{i}: {time}")
+        # Write each consignee to separate files
+        with open(f"consignee_{i}.txt", "w") as file:
+            file.write(time)
+    for i, time in enumerate(delivery_times, start=1):
+        print(f"Delivery #{i}: {time}")
+        # Write each delivery to separate files
+        with open(f"delivery_{i}.txt", "w") as file:
+            file.write(time)
+
+    loads_ref = db.collection('users').document(user_uid).collection('loads')
+
+
+# Get the latest load document number
+    latest_load = loads_ref.order_by('document_number', direction=firestore.Query.DESCENDING).limit(1).get()
+    if latest_load:
+        document_number = latest_load[0].to_dict()['document_number'] + 1
+    else:
+        document_number = 1
 
     # Create a new load document
     load_doc_ref = loads_ref.document(timestamp)
@@ -102,22 +127,22 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'LoadMiles': load_miles,
         'PickUp': pick_up,
         'PickUpTime': pick_up_t,
-        'Consignees': consignee,
+        'Consignees': consignee_location,
         'DeliveryTimes': delivery_times,
         'DocumentNumber': document_number,
     })
-
+    
 # Extract text from the PDF
 pdf_text = extract_text_from_pdf(file_name)
 
 # Apply regex rules to extract information
 (
-    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_times, delivery_times
+    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
 ) = apply_regex_rules(pdf_text)
 
 # Save the result to Firebase
 save_result_to_firebase(
-    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_times, delivery_times
+    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
 )
 
 sys.exit()
