@@ -90,6 +90,7 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
 
     # Save the extracted information to the load document
     load_doc_ref.set({
+        'FileName': file_name,
         'LoadNumber': load_number,
         'Rate': rate,
         'BrokerEmail': broker_email,
