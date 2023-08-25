@@ -26,8 +26,8 @@ def launch_python_file():
     bucket = storage.bucket(bucket_name)
     folder_name = user_uid  # Replace with the appropriate user UID
     blobs = bucket.list_blobs(prefix=folder_name)
-
-    # Wait for 2 seconds
+    
+    # Wait for 1 seconds
     time.sleep(1)
 
     # Iterate over the blobs and get the last added file
@@ -41,14 +41,11 @@ def launch_python_file():
             '/')[-1])  # Get the file name from the blob URL
         file_url = last_added_blob.generate_signed_url(
             expiration=timedelta(minutes=15))
-        print('Last added file URL:', file_url)
 
         # Download the file from Firebase
         response = requests.get(file_url)
         with open(file_name, 'wb') as f:
             f.write(response.content)
-
-        print(f'File "{file_name}" downloaded successfully')
 
         # Process the downloaded file with Pytesseract
         images = convert_from_path(file_name)
@@ -56,10 +53,6 @@ def launch_python_file():
         for i, image in enumerate(images):
             text = pytesseract.image_to_string(image)
             all_text += text
-
-        # Print the extracted text
-        print("Text Exctracted")
-        #print(all_text)
 
         # List of broker companies
         broker_companies = [
@@ -325,8 +318,6 @@ def launch_python_file():
         # Find the most used broker company
         most_used_broker = max(broker_counts, key=broker_counts.get)
 
-        print("Most used broker company:", most_used_broker)
-
         # Correct the identified broker company names if needed
         if most_used_broker == "J .B. Hunt":
             most_used_broker = "J. B. Hunt Transportation"
@@ -419,11 +410,10 @@ def launch_python_file():
         elif most_used_broker == "American Transport Group":
             most_used_broker = "American Transport Group, LLC"                                                                                                       
 
-        # Wait for 20 seconds
-        time.sleep(3)
+        # Wait for 1 seconds
+        time.sleep(1)
         # Delete the file
         os.remove(file_name)
-        print(f'File "{file_name}" deleted successfully')
 
     else:
         print('No files found in the folder')
