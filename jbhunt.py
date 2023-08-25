@@ -79,14 +79,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
 
     loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
-
-# Get the latest load document number
-    latest_load = loads_ref.order_by('document_number', direction=firestore.Query.DESCENDING).limit(1).get()
-    if latest_load:
-        document_number = latest_load[0].to_dict()['document_number'] + 1
-    else:
-        document_number = 1
-
     # Create a new load document
     load_doc_ref = loads_ref.document(timestamp)
 
@@ -106,7 +98,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'PickUpTime': pick_up_t,
         'Deliveries': consignee_location,
         'DeliveryTimes': delivery_times,
-        'DocumentNumber': document_number,
     })
     
 # Extract text from the PDF
