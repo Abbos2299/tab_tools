@@ -127,7 +127,7 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'LoadMiles': load_miles,
         'PickUp': pick_up,
         'PickUpTime': pick_up_t,
-        'Consignees': consignee_location,
+        'Deliveries': consignee_location,
         'DeliveryTimes': delivery_times,
         'DocumentNumber': document_number,
     })
