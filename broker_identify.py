@@ -22,7 +22,9 @@ firebase_admin.initialize_app(cred)
 @app.route('/launch', methods=['GET'])
 def launch_python_file():
     user_uid = request.args.get('uid')
-    print('User UID:', user_uid)
+    
+    # Return a success response
+    return 'Request received and processing started'
 
     bucket_name = 'tab-tools.appspot.com'
     bucket = storage.bucket(bucket_name)
