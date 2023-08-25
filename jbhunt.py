@@ -77,7 +77,7 @@ def apply_regex_rules(text):
 
 def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
 
-    loads_ref = db.collection('users').document(user_uid).collection('loads')
+    loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
 
 # Get the latest load document number
