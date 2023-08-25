@@ -22,9 +22,6 @@ firebase_admin.initialize_app(cred)
 def launch_python_file():
     user_uid = request.args.get('uid')
     
-    # Return a success response
-    return 'Request received and processing started'
-
     bucket_name = 'tab-tools.appspot.com'
     bucket = storage.bucket(bucket_name)
     folder_name = user_uid  # Replace with the appropriate user UID
