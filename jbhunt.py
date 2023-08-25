@@ -23,10 +23,6 @@ user_uid = sys.argv[1]
 most_used_broker = sys.argv[2]
 file_name = sys.argv[3]
 
-print(user_uid)
-print(most_used_broker)
-print(file_name)
-
 def extract_text_from_pdf(file_path):
     resource_manager = PDFResourceManager()
     output_stream = io.StringIO()
@@ -67,7 +63,6 @@ def apply_regex_rules(text):
 
     delivery_info = re.findall(r'Delivery\n(.+)', text)
     delivery_times = delivery_info[:-1]  # Exclude the last occurrence
-    
 
     return (
         load_number.group(1) if load_number else None,
@@ -78,27 +73,9 @@ def apply_regex_rules(text):
         pick_up_t,
         consignee_location,
         delivery_times,
-
     )
 
 def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
-    print(load_number)
-    print(rate)
-    print(broker_email)
-    print(load_miles)
-    print(pick_up)
-    print(pick_up_t)
-
-    for i, time in enumerate(consignee_location, start=1):
-        print(f"Consignee #{i}: {time}")
-        # Write each consignee to separate files
-        with open(f"consignee_{i}.txt", "w") as file:
-            file.write(time)
-    for i, time in enumerate(delivery_times, start=1):
-        print(f"Delivery #{i}: {time}")
-        # Write each delivery to separate files
-        with open(f"delivery_{i}.txt", "w") as file:
-            file.write(time)
 
     loads_ref = db.collection('users').document(user_uid).collection('loads')
 
