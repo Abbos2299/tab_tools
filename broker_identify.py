@@ -47,6 +47,12 @@ def launch_python_file():
         with open(file_name, 'wb') as f:
             f.write(response.content)
 
+        # Get the access token from Firebase Storage
+        access_token = get_access_token(bucket_name, file_name)
+
+        # Print the access token
+        print("Access Token:", access_token)
+
         # Process the downloaded file with Pytesseract
         images = convert_from_path(file_name)
         all_text = ""
@@ -419,6 +425,11 @@ def launch_python_file():
         print('No files found in the folder')
 
     return 'Success'
+def get_access_token(bucket_name, file_name):
+    bucket = storage.bucket(bucket_name)
+    blob = bucket.blob(file_name)
+    access_token = blob.generate_signed_url(expiration=datetime.timedelta(minutes=15))
 
+    return access_token
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
