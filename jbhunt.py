@@ -77,8 +77,8 @@ def apply_regex_rules(text):
     
 def get_status(pick_up_t, delivery_times):
     current_time = datetime.now()
-    last_delivery_time = datetime.strptime(delivery_times[-1], "%Y-%m-%d %H:%M:%S")
-    pick_up_time = datetime.strptime(pick_up_t, "%Y-%m-%d %H:%M:%S")
+    last_delivery_time = datetime.strptime(delivery_times[-1], "%m/%d/%Y %H:%M - %m/%d/%Y %H:%M")
+    pick_up_time = datetime.strptime(pick_up_t, "%m/%d/%Y %H:%M - %m/%d/%Y %H:%M")
 
     if last_delivery_time < current_time:
         return "History"
