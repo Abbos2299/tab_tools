@@ -13,6 +13,8 @@ import os
 import pytesseract
 from pdf2image import convert_from_path
 import re
+from datetime import datetime, timedelta
+
 
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
