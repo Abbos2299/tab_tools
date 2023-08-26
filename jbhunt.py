@@ -62,10 +62,6 @@ def apply_regex_rules(text):
     consignee_location = ['\n'.join(consignee[1:]) for consignee in consignees]
 
     delivery_info = re.findall(r'Delivery\n((?:.|\n)+)', text)
-    match = re.search(r'(\d{2}/\d{2}/\d{4} \d{2}:\d{2}) - (\d{2}/\d{2}/\d{4} \d{2}:\d{2})', info)
-        if match:
-            delivery_times.append(f"{match.group(1)} - {match.group(2)}")
-
     delivery_times = delivery_info[:-1]  # Exclude the last occurrence
 
     return (
