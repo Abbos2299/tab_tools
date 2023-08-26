@@ -13,8 +13,6 @@ import os
 import pytesseract
 from pdf2image import convert_from_path
 import re
-from datetime import datetime, timedelta
-
 
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
@@ -28,7 +26,7 @@ def launch_python_file():
     bucket = storage.bucket(bucket_name)
     folder_name = user_uid  # Replace with the appropriate user UID
     blobs = bucket.list_blobs(prefix=folder_name)
-    
+     
     # Wait for 1 seconds
     time.sleep(1)
 
@@ -48,12 +46,6 @@ def launch_python_file():
         response = requests.get(file_url)
         with open(file_name, 'wb') as f:
             f.write(response.content)
-
-        # Get the access token from Firebase Storage
-        access_token = get_access_token(bucket_name, file_name)
-
-        # Print the access token
-        print("Access Token:", access_token)
 
         # Process the downloaded file with Pytesseract
         images = convert_from_path(file_name)
