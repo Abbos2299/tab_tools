@@ -74,21 +74,9 @@ def apply_regex_rules(text):
         consignee_location,
         delivery_times,
     )
-    
-def get_status(pick_up_t, delivery_times):
-    current_time = datetime.now()
-    last_delivery_time = datetime.strptime(delivery_times[-1], "%m/%d/%Y %H:%M - %m/%d/%Y %H:%M")
-    pick_up_time = datetime.strptime(pick_up_t, "%m/%d/%Y %H:%M - %m/%d/%Y %H:%M")
-
-    if last_delivery_time < current_time:
-        return "History"
-    elif pick_up_time <= current_time + timedelta(hours=3):
-        return "Active"
-    else:
-        return "Upcoming"
 
 def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
-    status = get_status(pick_up_t, delivery_times)
+
     loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
     # Create a new load document
@@ -111,7 +99,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'PickUpTime': pick_up_t,
         'Deliveries': consignee_location,
         'DeliveryTimes': delivery_times,
-        'Status': status
     })
     
 # Extract text from the PDF
@@ -124,7 +111,7 @@ pdf_text = extract_text_from_pdf(file_name)
 
 # Save the result to Firebase
 save_result_to_firebase(
-    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times,
+    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
 )
 
 sys.exit()
