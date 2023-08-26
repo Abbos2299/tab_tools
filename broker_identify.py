@@ -1,4 +1,3 @@
-import subprocess
 import sys
 from flask import Flask, request
 import firebase_admin
@@ -10,9 +9,7 @@ import requests
 import time
 import urllib.parse
 import os
-import pytesseract
-from pdf2image import convert_from_path
-import re
+import PyPDF2
 
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
@@ -27,7 +24,7 @@ def launch_python_file():
     folder_name = user_uid  # Replace with the appropriate user UID
     blobs = bucket.list_blobs(prefix=folder_name)
     
-    # Wait for 1 seconds
+    # Wait for 1 second
     time.sleep(1)
 
     # Iterate over the blobs and get the last added file
@@ -37,23 +34,23 @@ def launch_python_file():
             last_added_blob = blob
 
     if last_added_blob:
-        file_name = urllib.parse.unquote(last_added_blob.name.split(
-            '/')[-1])  # Get the file name from the blob URL
-        file_url = last_added_blob.generate_signed_url(
-            expiration=timedelta(minutes=15))
+        file_name = urllib.parse.unquote(last_added_blob.name.split('/')[-1])  # Get the file name from the blob URL
+        file_url = last_added_blob.generate_signed_url(expiration=timedelta(minutes=15))
 
         # Download the file from Firebase
         response = requests.get(file_url)
         with open(file_name, 'wb') as f:
             f.write(response.content)
 
-        # Process the downloaded file with Pytesseract
-        images = convert_from_path(file_name)
-        all_text = ""
-        for i, image in enumerate(images):
-            text = pytesseract.image_to_string(image)
-            all_text += text
+        # Process the downloaded file with PyPDF2
+        with open(file_name, 'rb') as pdf_file:
+            reader = PyPDF2.PdfFileReader(pdf_file)
+            all_text = ""
+            for page_num in range(reader.numPages):
+                page = reader.getPage(page_num)
+                all_text += page.extract_text()
 
+        
         # List of broker companies
         broker_companies = [
             "AFC Brokerage",
