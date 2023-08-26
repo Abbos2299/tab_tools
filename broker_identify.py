@@ -42,12 +42,11 @@ def launch_python_file():
         with open(file_name, 'wb') as f:
             f.write(response.content)
 
-        # Process the downloaded file with PyPDF2
+         # Process the downloaded file with PyPDF2
         with open(file_name, 'rb') as pdf_file:
-            reader = PyPDF2.PdfFileReader(pdf_file)
+            reader = PyPDF2.PdfReader(pdf_file)
             all_text = ""
-            for page_num in range(reader.numPages):
-                page = reader.getPage(page_num)
+            for page in reader.pages:
                 all_text += page.extract_text()
 
         
