@@ -9,8 +9,6 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from firebase_admin import storage
-
 
 timestamp = datetime.now().strftime("%y%m%d%H%M%S")
 
@@ -38,13 +36,6 @@ def extract_text_from_pdf(file_path):
     device.close()
     output_stream.close()
     return text
-
-def get_access_token(bucket_name, file_name):
-    bucket = storage.bucket(bucket_name)
-    blob = bucket.blob(file_name)
-    access_token = blob.generate_signed_url(expiration=datetime.timedelta(minutes=15))
-
-    return access_token
 
 def apply_regex_rules(text):
     load_number = re.search(r'Carrier Confirmation for Load (.+)', text)
@@ -82,11 +73,8 @@ def apply_regex_rules(text):
         consignee_location,
         delivery_times,
     )
-    # Get the access token from Firebase Storage
-bucket_name = 'gs://tab-tools.appspot.com/'
-access_token = get_access_token(bucket_name, file_name)
 
-def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times, access_token):
+def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
 
     loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
@@ -110,7 +98,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'PickUpTime': pick_up_t,
         'Deliveries': consignee_location,
         'DeliveryTimes': delivery_times,
-        'AccessToken': access_token,  # Add the access token field
     })
     
 # Extract text from the PDF
