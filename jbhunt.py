@@ -57,11 +57,11 @@ def apply_regex_rules(text):
     pick_up_time = re.search(r'Pickup\n(.+)', text)
     pick_up_t = pick_up_time.group(1) if pick_up_time else None
 
-    consignee_regex = r'Consignee # (\d+)\n(.+?)\n(.+?)\n(.+?)\n'
-    consignees = re.findall(consignee_regex, text, re.DOTALL)
+    consignee_regex = r'Consignee # (\d+)\n((?:.|\n)+?)\n((?:.|\n)+?)\n((?:.|\n)+?)\n'
+    consignees = re.findall(consignee_regex, text)
     consignee_location = ['\n'.join(consignee[1:]) for consignee in consignees]
 
-    delivery_info = re.findall(r'Delivery\n(.+)', text)
+    delivery_info = re.findall(r'Delivery\n((?:.|\n)+)', text)
     delivery_times = delivery_info[:-1]  # Exclude the last occurrence
 
     return (
