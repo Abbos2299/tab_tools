@@ -9,7 +9,8 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-from torch import StorageBase
+from firebase_admin import storage
+
 
 timestamp = datetime.now().strftime("%y%m%d%H%M%S")
 
@@ -77,7 +78,7 @@ def apply_regex_rules(text):
     )
 # Retrieve the access token from the file in Google Cloud Storage
 def get_access_token(bucket_name, file_name):
-    storage_client = StorageBase.Client()
+    storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
     blob = bucket.blob(file_name)
     access_token = blob.token
