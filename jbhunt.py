@@ -39,6 +39,14 @@ def extract_text_from_pdf(file_path):
     output_stream.close()
     return text
 
+def get_access_token(bucket_name, file_name):
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(file_name)
+    access_token = blob.generate_signed_url(expiration=datetime.timedelta(minutes=15))
+
+    return access_token
+
 def apply_regex_rules(text):
     load_number = re.search(r'Carrier Confirmation for Load (.+)', text)
     rate = re.search(r'Total Rate:(.+)', text)
