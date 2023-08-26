@@ -124,7 +124,7 @@ pdf_text = extract_text_from_pdf(file_name)
 
 # Save the result to Firebase
 save_result_to_firebase(
-    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
+    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times, status
 )
 
 sys.exit()
