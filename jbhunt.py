@@ -74,8 +74,16 @@ def apply_regex_rules(text):
         consignee_location,
         delivery_times,
     )
+# Retrieve the access token from the file in Google Cloud Storage
+def get_access_token(bucket_name, file_name):
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(file_name)
+    access_token = blob.token
 
-def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
+    return access_token
+
+def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times, access_token):
 
     loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
@@ -99,6 +107,7 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'PickUpTime': pick_up_t,
         'Deliveries': consignee_location,
         'DeliveryTimes': delivery_times,
+        'AccessToken': access_token,  # Add the access token field
     })
     
 # Extract text from the PDF
@@ -109,9 +118,13 @@ pdf_text = extract_text_from_pdf(file_name)
     load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
 ) = apply_regex_rules(pdf_text)
 
+# Get the access token from Google Cloud Storage
+bucket_name = 'gs://tab-tools.appspot.com'
+access_token = get_access_token(bucket_name, file_name)
+
 # Save the result to Firebase
 save_result_to_firebase(
-    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
+    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times, access_token
 )
 
 sys.exit()
