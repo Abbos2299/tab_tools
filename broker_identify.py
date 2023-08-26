@@ -316,97 +316,104 @@ def launch_python_file():
         # Find the most used broker company
         most_used_broker = max(broker_counts, key=broker_counts.get)
 
+        # Check if a broker is identified
+        if broker_counts[most_used_broker] == 0:
+            print("No broker found")
+        else:
+        
+
+    
         # Correct the identified broker company names if needed
-        if most_used_broker == "J .B. Hunt":
-            most_used_broker = "J. B. Hunt Transportation"
-            subprocess.call([sys.executable, "jbhunt.py", user_uid, most_used_broker, file_name])
+            if most_used_broker == "J .B. Hunt":
+                most_used_broker = "J. B. Hunt Transportation"
+                subprocess.call([sys.executable, "jbhunt.py", user_uid, most_used_broker, file_name])
             
-        elif most_used_broker == "Priority 1":
-            most_used_broker = "Priority 1 Logistics"
+            elif most_used_broker == "Priority 1":
+                most_used_broker = "Priority 1 Logistics"
 
-        elif most_used_broker == "G02 EXPRESS":
-            most_used_broker = "GO2 EXPRESS"
-            
-        elif most_used_broker == "NTG":
-            most_used_broker = "Nolan Transportation Group, LLC" 
+            elif most_used_broker == "G02 EXPRESS":
+                most_used_broker = "GO2 EXPRESS"
 
-        elif most_used_broker == "SCAN GLOBAL":
-            most_used_broker = "SCAN GLOBAL LOGISTICS"
+            elif most_used_broker == "NTG":
+                most_used_broker = "Nolan Transportation Group, LLC" 
 
-        elif most_used_broker == "everest":
-            most_used_broker = "EVEREST transportation systems"
+            elif most_used_broker == "SCAN GLOBAL":
+                most_used_broker = "SCAN GLOBAL LOGISTICS"
 
-        elif most_used_broker == "PLS":
-            most_used_broker = "PLS Logistics Services"
+            elif most_used_broker == "everest":
+                most_used_broker = "EVEREST transportation systems"
 
-        elif most_used_broker == "LIBERTY":
-            most_used_broker = "LIBERTY COMMERCIAL"
+            elif most_used_broker == "PLS":
+                most_used_broker = "PLS Logistics Services"
 
-        elif most_used_broker == "Redwood":
-            most_used_broker = "REDWOOD"
+            elif most_used_broker == "LIBERTY":
+                most_used_broker = "LIBERTY COMMERCIAL"
 
-        elif most_used_broker == "NORTH EAST LOGISTICS":
-            most_used_broker = "NORTHEAST LOGISTICS"
+            elif most_used_broker == "Redwood":
+                most_used_broker = "REDWOOD"
 
-        elif most_used_broker == "TransAm Logistics":
-            most_used_broker = "TransAm Logistics, Inc"
+            elif most_used_broker == "NORTH EAST LOGISTICS":
+                most_used_broker = "NORTHEAST LOGISTICS"
 
-        elif most_used_broker == "ELISqutions":
-            most_used_broker = "ELI Solutions, LLC"
+            elif most_used_broker == "TransAm Logistics":
+                most_used_broker = "TransAm Logistics, Inc"
 
-        elif most_used_broker == "freedomtransusa":
-            most_used_broker = "Freedom Trans USA, LLC"
+            elif most_used_broker == "ELISqutions":
+                most_used_broker = "ELI Solutions, LLC"
 
-        elif most_used_broker == "C&L":
-            most_used_broker = "C & L LOGISTICS, INC."
+            elif most_used_broker == "freedomtransusa":
+                most_used_broker = "Freedom Trans USA, LLC"
 
-        elif most_used_broker == "GulfRelay":
-            most_used_broker = "Gulf Rlay Logistics, LLC"
+            elif most_used_broker == "C&L":
+                most_used_broker = "C & L LOGISTICS, INC."
 
-        elif most_used_broker == "axlelogistics":
-            most_used_broker = "AXLE LOGISTICS, LLC"
+            elif most_used_broker == "GulfRelay":
+                most_used_broker = "Gulf Rlay Logistics, LLC"
 
-        elif most_used_broker == "Achest":
-            most_used_broker = "ArcBest Dedicated, LLC"
-            
-        elif most_used_broker == "Sim Ie Lo istics,LLC":
-            most_used_broker = "Simple Logistics, LLC"
+            elif most_used_broker == "axlelogistics":
+                most_used_broker = "AXLE LOGISTICS, LLC"
 
-        elif most_used_broker == "RJ S":
-            most_used_broker = "RJS"
+            elif most_used_broker == "Achest":
+                most_used_broker = "ArcBest Dedicated, LLC"
 
-        elif most_used_broker == "FEDEX CUSTOM CRITICAL":
-            most_used_broker = "FEDEX CUSTOM CRITICAL"
+            elif most_used_broker == "Sim Ie Lo istics,LLC":
+                most_used_broker = "Simple Logistics, LLC"
 
-        elif most_used_broker == "englandlogistics":
-            most_used_broker = "englandlogistics"
+            elif most_used_broker == "RJ S":
+                most_used_broker = "RJS"
 
-        elif most_used_broker == "Summit E1even":
-            most_used_broker = "Summit Eleven Inc"
+            elif most_used_broker == "FEDEX CUSTOM CRITICAL":
+                most_used_broker = "FEDEX CUSTOM CRITICAL"
 
-        elif most_used_broker == "ELITE TRANSITSOLU":
-            most_used_broker = "ELITE TRANSIT"
+            elif most_used_broker == "englandlogistics":
+                most_used_broker = "englandlogistics"
 
-        elif most_used_broker == "RTS":
-            most_used_broker = "Reliable Transportation Soiutions"
+            elif most_used_broker == "Summit E1even":
+                most_used_broker = "Summit Eleven Inc"
 
-        elif most_used_broker == "spotinc":
-            most_used_broker = "SPOT"
+            elif most_used_broker == "ELITE TRANSITSOLU":
+                most_used_broker = "ELITE TRANSIT"
 
-        elif most_used_broker == "emergemarket":
-            most_used_broker = "EMERGET ECH LLC" 
+            elif most_used_broker == "RTS":
+                most_used_broker = "Reliable Transportation Soiutions"
 
-        elif most_used_broker == "R&R FREIGHT":
-            most_used_broker = "R&R Freight Logistics, LLC"
+            elif most_used_broker == "spotinc":
+                most_used_broker = "SPOT"
 
-        elif most_used_broker == "Packer Transponallun":
-            most_used_broker = "Packer Transportation & Logistics"
+            elif most_used_broker == "emergemarket":
+                most_used_broker = "EMERGET ECH LLC" 
 
-        elif most_used_broker == "SP1 Logistics":
-            most_used_broker = "SPI Logistics"
+            elif most_used_broker == "R&R FREIGHT":
+                most_used_broker = "R&R Freight Logistics, LLC"
 
-        elif most_used_broker == "American Transport Group":
-            most_used_broker = "American Transport Group, LLC"                                                                                                       
+            elif most_used_broker == "Packer Transponallun":
+                most_used_broker = "Packer Transportation & Logistics"
+
+            elif most_used_broker == "SP1 Logistics":
+                most_used_broker = "SPI Logistics"
+
+            elif most_used_broker == "American Transport Group":
+                most_used_broker = "American Transport Group, LLC"                                                                                                       
 
         # Wait for 1 seconds
         time.sleep(1)
