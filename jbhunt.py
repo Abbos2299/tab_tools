@@ -98,6 +98,7 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'PickUpTime': pick_up_t,
         'Deliveries': consignee_location,
         'DeliveryTimes': delivery_times,
+        'Status': 'Active',
     })
     
 # Extract text from the PDF
