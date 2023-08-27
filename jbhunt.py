@@ -81,12 +81,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
     # Create a new load document
     load_doc_ref = loads_ref.document(timestamp)
 
-    # Create the "rules" document and set the "Last added load" field
-    rules_doc_ref = loads_ref.document('rules')
-    rules_doc_ref.set({
-        'Last added load': timestamp
-    })
-
     # Save the extracted information to the load document
     load_doc_ref.set({
         'FileName': file_name,
