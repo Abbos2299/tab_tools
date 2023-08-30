@@ -317,6 +317,7 @@ def launch_python_file():
 
         # Find the most used broker company
         most_used_broker = max(broker_counts, key=broker_counts.get)
+        print (most_used_broker)
 
         # Correct the identified broker company names if needed
         if most_used_broker == "J .B. Hunt":
