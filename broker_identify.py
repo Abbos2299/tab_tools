@@ -167,7 +167,7 @@ def launch_python_file():
 "Integrity Express",
 "ITF LOGISTICS GROUP",
 "ITS Logistics",
-"J .B. Hunt",
+"J.B. Hunt",
 "JEAR Logistics",
 "jerue Companies",
 "Johanson Transportation",
