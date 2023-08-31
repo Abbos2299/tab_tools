@@ -53,7 +53,8 @@ def launch_python_file():
         for i, image in enumerate(images):
             text = pytesseract.image_to_string(image)
             all_text += text
-
+            
+        print(all_text)
         # List of broker companies
         broker_companies = [
             "AFC Brokerage",
