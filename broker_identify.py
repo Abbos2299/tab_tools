@@ -54,7 +54,7 @@ def launch_python_file():
             text = pytesseract.image_to_string(image)
             all_text += text
             
-        print(all_text)
+        #print(all_text)
         # List of broker companies
         broker_companies = [
             "AFC Brokerage",
