@@ -18,7 +18,7 @@ app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
 
-@app.route('/launch', methods=['GET'])
+@app.route('/launchidentify', methods=['GET'])
 def launch_python_file():
     user_uid = request.args.get('uid')
     
