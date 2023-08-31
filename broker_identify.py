@@ -323,7 +323,7 @@ def launch_python_file():
             print(most_used_broker)
 
             # Correct the identified broker company names if needed
-            if most_used_broker == "J .B. Hunt":
+            if most_used_broker == "J.B. Hunt":
                 most_used_broker = "J. B. Hunt Transportation"
                 subprocess.call([sys.executable, "jbhunt.py", user_uid, most_used_broker, file_name])
             
