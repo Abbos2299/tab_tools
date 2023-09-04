@@ -18,6 +18,37 @@ app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
 
+
+@app.route('/locationcheck', methods=['GET'])
+def location_check():
+    user_uid = request.args.get('uid')
+    
+    # Perform your location check logic here
+    # Example: You can check if the user with the given UID is in an allowed location
+    
+    # If the location check succeeds, return 'Success'
+    # Otherwise, you can return an appropriate error message
+    if location_check_succeeds(user_uid):
+        return 'Success'
+    else:
+        return 'Location check failed'  # You can customize this message
+
+def location_check_succeeds(user_uid):
+    # Implement your location check logic here
+    # You can use user_uid to identify the user and perform the check
+
+    # Example: You can check if the user is in an allowed location based on their UID
+    # Replace this with your actual logic
+    allowed_locations = ['location1', 'location2']
+    if user_uid in allowed_locations:
+        return True
+    else:
+        return False
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+
 @app.route('/launchidentify', methods=['GET'])
 def launch_python_file():
     user_uid = request.args.get('uid')
