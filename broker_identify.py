@@ -17,6 +17,7 @@ import re
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
+storage = fb_storage.bucket()
 
 
 @app.route('/locationcheck', methods=['GET'])
@@ -43,7 +44,8 @@ def launch_python_file():
     
     bucket_name = 'tab-tools.appspot.com'
     bucket = storage.bucket(bucket_name)
-    folder_name = user_uid  # Replace with the appropriate user UID
+    folder_name = f'{user_uid}/RC_Files/'
+    
     blobs = bucket.list_blobs(prefix=folder_name)
      
     # Wait for 1 seconds
@@ -73,7 +75,7 @@ def launch_python_file():
             text = pytesseract.image_to_string(image)
             all_text += text
             
-        #print(all_text)
+        print(all_text)
         # List of broker companies
         broker_companies = [
             "AFC Brokerage",
