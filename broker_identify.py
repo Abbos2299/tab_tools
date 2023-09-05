@@ -43,6 +43,36 @@ def launch_python_file():
     user_uid = request.args.get('uid')
     
     bucket_name = 'tab-tools.appspot.com'
+
+
+    # Initialize Firebase storage
+    storage_client = storage.client()
+
+    try:
+        # Check if the specified bucket exists
+        bucket = storage_client.bucket(bucket_name)
+        if not bucket.exists():
+            return 'Bucket not found', 404
+
+        # Check if the folder with the user's UID exists
+        user_folder_name = f'{user_uid}/'
+        user_folder = bucket.blob(user_folder_name)
+        if not user_folder.exists():
+            return f'User folder ({user_folder_name}) not found', 404
+
+        # Check if the "RC_Files" folder exists within the user's folder
+        rc_folder_name = f'{user_uid}/RC_Files/'
+        rc_folder = bucket.blob(rc_folder_name)
+        if not rc_folder.exists():
+            return f'RC_Files folder ({rc_folder_name}) not found', 404
+
+        # If all checks pass, print the information
+        return f'Bucket: {bucket_name}, User Folder: {user_folder_name}, RC_Files Folder: {rc_folder_name}'
+    
+    except Exception as e:
+        return f'Error: {str(e)}', 500
+
+    
     bucket = storage.bucket(bucket_name)
     folder_name = user_uid  # Replace with the appropriate user UID
     blobs = bucket.list_blobs(prefix=folder_name)
