@@ -33,17 +33,17 @@ def location_check():
         return 'Location check failed'
 
 
-def location_check_succeeds(user_uid):
-    # Implement your location check logic here
+def get_location(user_uid):
+    # Implement your location retrieval logic here
     # You can use user_uid to identify the user and perform the check
+    
+    # Replace this with your actual location retrieval code
+    latitude = 37.12345  # Example latitude value
+    longitude = -122.45678  # Example longitude value
+    
+    return latitude, longitude
 
-    # Example: You can check if the user is in an allowed location based on their UID
-    # Replace this with your actual logic
-    allowed_locations = ['location1', 'location2']
-    if user_uid in allowed_locations:
-        return True
-    else:
-        return False
+# The rest of your code remains the same
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
