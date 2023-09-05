@@ -23,15 +23,15 @@ firebase_admin.initialize_app(cred)
 def location_check():
     user_uid = request.args.get('uid')
     
-    # Perform your location check logic here
-    # Example: You can check if the user with the given UID is in an allowed location
-    
-    # If the location check succeeds, return 'Success'
-    # Otherwise, you can return an appropriate error message
-    if location_check_succeeds(user_uid):
+   # Replace this with your location retrieval logic
+    latitude, longitude = get_location(user_uid)
+
+    if latitude is not None and longitude is not None:
+        print(f'Latitude: {latitude}, Longitude: {longitude}')
         return 'Success'
     else:
-        return 'Location check failed'  # You can customize this message
+        return 'Location check failed'
+
 
 def location_check_succeeds(user_uid):
     # Implement your location check logic here
