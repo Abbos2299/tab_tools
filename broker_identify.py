@@ -433,10 +433,6 @@ def get_access_token(bucket_name, file_name):
     access_token = blob.generate_signed_url(expiration=datetime.timedelta(minutes=15))
 
     return access_token
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-
 
 @app.route('/locationcheck', methods=['GET'])
 def location_check():
