@@ -16,7 +16,10 @@ import re
 
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
-firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred, {
+    'storageBucket': 'tab-tools.appspot.com'  # Replace with your Firebase Storage bucket name
+})
+bucket = storage.bucket()
 
 
 @app.route('/locationcheck', methods=['GET'])
@@ -42,35 +45,35 @@ if __name__ == '__main__':
 def launch_python_file():
     user_uid = request.args.get('uid')
     
-    bucket_name = 'tab-tools.appspot.com'
+    if not user_uid:
+        return 'User UID not provided', 400
 
-
-    # Initialize Firebase storage
-    storage_client = storage.client()
-
+    # Check if the specified bucket exists
     try:
-        # Check if the specified bucket exists
-        bucket = storage_client.bucket(bucket_name)
-        if not bucket.exists():
-            return 'Bucket not found', 404
+        bucket.get()
+        print(f'Bucket found: {bucket.name}')
+    except:
+        return 'Bucket not found', 404
 
-        # Check if the folder with the user's UID exists
-        user_folder_name = f'{user_uid}/'
-        user_folder = bucket.blob(user_folder_name)
-        if not user_folder.exists():
-            return f'User folder ({user_folder_name}) not found', 404
+    # Check if the user's folder exists
+    user_folder = f'{user_uid}/'
+    try:
+        bucket.blob(user_folder).download_as_text()
+        print(f'User folder found: {user_folder}')
+    except:
+        return 'User folder not found', 404
 
-        # Check if the "RC_Files" folder exists within the user's folder
-        rc_folder_name = f'{user_uid}/RC_Files/'
-        rc_folder = bucket.blob(rc_folder_name)
-        if not rc_folder.exists():
-            return f'RC_Files folder ({rc_folder_name}) not found', 404
+    # Check if the "RC_Files" folder exists within the user's folder
+    rc_folder = f'{user_folder}RC_Files/'
+    try:
+        bucket.blob(rc_folder).download_as_text()
+        print(f'RC_Files folder found: {rc_folder}')
+    except:
+        return 'RC_Files folder not found', 404
 
-        # If all checks pass, print the information
-        return f'Bucket: {bucket_name}, User Folder: {user_folder_name}, RC_Files Folder: {rc_folder_name}'
-    
-    except Exception as e:
-        return f'Error: {str(e)}', 500
+    # If all checks pass, you can execute your desired code here
+
+    return 'Success'
 
     
     bucket = storage.bucket(bucket_name)
