@@ -21,16 +21,10 @@ firebase_admin.initialize_app(cred)
 @app.route('/launchidentify', methods=['GET'])
 def launch_python_file():
     user_uid = request.args.get('uid')
-
-    if user_uid is None:
-        return 'Error: No user_uid provided in the request.', 400
     
     bucket_name = 'tab-tools.appspot.com'
     bucket = storage.bucket(bucket_name)
     folder_name = user_uid  # Replace with the appropriate user UID
-    
-    if not user_uid:
-        return 'Error: Invalid user_uid provided in the request.', 400
     
     blobs = bucket.list_blobs(prefix=folder_name)
      
