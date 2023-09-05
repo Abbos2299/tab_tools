@@ -22,26 +22,14 @@ firebase_admin.initialize_app(cred)
 @app.route('/locationcheck', methods=['GET'])
 def location_check():
     user_uid = request.args.get('uid')
+    latitude = request.args.get('lat')
+    longitude = request.args.get('lon')
     
-   # Replace this with your location retrieval logic
-    latitude, longitude = get_location(user_uid)
-
     if latitude is not None and longitude is not None:
         print(f'Latitude: {latitude}, Longitude: {longitude}')
         return 'Success'
     else:
         return 'Location check failed'
-
-
-def get_location(user_uid):
-    # Implement your location retrieval logic here
-    # You can use user_uid to identify the user and perform the check
-    
-    # Replace this with your actual location retrieval code
-    latitude = 37.12345  # Example latitude value
-    longitude = -122.45678  # Example longitude value
-    
-    return latitude, longitude
 
 # The rest of your code remains the same
 
