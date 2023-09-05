@@ -16,68 +16,22 @@ import re
 
 app = Flask(__name__)
 cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
-firebase_admin.initialize_app(cred, {
-    'storageBucket': 'tab-tools.appspot.com'  # Replace with your Firebase Storage bucket name
-})
-bucket = storage.bucket()
-
-
-@app.route('/locationcheck', methods=['GET'])
-def location_check():
-    user_uid = request.args.get('uid')
-    latitude = request.args.get('lat')
-    longitude = request.args.get('lon')
-    
-    if latitude is not None and longitude is not None:
-        print(f'Latitude: {latitude}, Longitude: {longitude}')
-        return 'Success'
-    else:
-        return 'Location check failed'
-
-# The rest of your code remains the same
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-
+firebase_admin.initialize_app(cred)
 
 @app.route('/launchidentify', methods=['GET'])
 def launch_python_file():
     user_uid = request.args.get('uid')
+
+    if user_uid is None:
+        return 'Error: No user_uid provided in the request.', 400
     
-    if not user_uid:
-        return 'User UID not provided', 400
-
-    # Check if the specified bucket exists
-    try:
-        bucket.get()
-        print(f'Bucket found: {bucket.name}')
-    except:
-        return 'Bucket not found', 404
-
-    # Check if the user's folder exists
-    user_folder = f'{user_uid}/'
-    try:
-        bucket.blob(user_folder).download_as_text()
-        print(f'User folder found: {user_folder}')
-    except:
-        return 'User folder not found', 404
-
-    # Check if the "RC_Files" folder exists within the user's folder
-    rc_folder = f'{user_folder}RC_Files/'
-    try:
-        bucket.blob(rc_folder).download_as_text()
-        print(f'RC_Files folder found: {rc_folder}')
-    except:
-        return 'RC_Files folder not found', 404
-
-    # If all checks pass, you can execute your desired code here
-
-    return 'Success'
-
-    
+    bucket_name = 'tab-tools.appspot.com'
     bucket = storage.bucket(bucket_name)
     folder_name = user_uid  # Replace with the appropriate user UID
+    
+    if not user_uid:
+        return 'Error: Invalid user_uid provided in the request.', 400
+    
     blobs = bucket.list_blobs(prefix=folder_name)
      
     # Wait for 1 seconds
@@ -485,5 +439,24 @@ def get_access_token(bucket_name, file_name):
     access_token = blob.generate_signed_url(expiration=datetime.timedelta(minutes=15))
 
     return access_token
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+
+
+@app.route('/locationcheck', methods=['GET'])
+def location_check():
+    user_uid = request.args.get('uid')
+    latitude = request.args.get('lat')
+    longitude = request.args.get('lon')
+    
+    if latitude is not None and longitude is not None:
+        print(f'Latitude: {latitude}, Longitude: {longitude}')
+        return 'Success'
+    else:
+        return 'Location check failed'
+
+# The rest of your code remains the same
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
