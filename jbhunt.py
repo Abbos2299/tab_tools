@@ -97,6 +97,8 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
     # Create a new load document
     load_doc_ref = loads_ref.document(timestamp)
 
+    full_distance_int = int(full_distance) if full_distance is not None else None
+
     # Save the extracted information to the load document
     load_doc_ref.set({
         'FileName': file_name,
