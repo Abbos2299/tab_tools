@@ -105,7 +105,7 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'LoadNumber': load_number,
         'Rate': rate,
         'BrokerEmail': broker_email,
-        'LoadMiles': load_miles,
+        'LoadMiles': full_distance_int,
         'PickUp': pick_up,
         'PickUpTime': pick_up_t,
         'Deliveries': consignee_location,
@@ -114,7 +114,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'Path': timestamp,
         'Submit BOL': 'no',
         'Broker Update': 'no',
-        'Full Distance': full_distance_int,
     })
     
 # Extract text from the PDF
