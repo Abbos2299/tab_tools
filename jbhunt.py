@@ -112,6 +112,7 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'Path': timestamp,
         'Submit BOL': 'no',
         'Broker Update': 'no',
+        'Full Distance': full_distance,
     })
     
 # Extract text from the PDF
@@ -128,6 +129,7 @@ if pick_up and consignee_location:
     full_distance = calculate_driving_distance(all_locations)
 else:
     full_distance = None
+    print('error')
 
 
 # Save the result to Firebase
