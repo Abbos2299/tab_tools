@@ -9,6 +9,7 @@ from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+import googlemaps
 
 timestamp = datetime.now().strftime("%y%m%d%H%M%S")
 
@@ -22,6 +23,10 @@ db = firestore.client()
 user_uid = sys.argv[1]
 most_used_broker = sys.argv[2]
 file_name = sys.argv[3]
+
+# Initialize Google Maps client
+google_maps_api_key = 'YOUR_API_KEY'  # Replace with your Google Maps API key
+gmaps = googlemaps.Client(key=google_maps_api_key)
 
 def extract_text_from_pdf(file_path):
     resource_manager = PDFResourceManager()
@@ -73,8 +78,19 @@ def apply_regex_rules(text):
         consignee_location,
         delivery_times,
     )
-
-def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times):
+    
+def calculate_driving_distance(locations):
+    total_distance = 0.0
+    for i in range(len(locations) - 1):
+        origin = locations[i]
+        destination = locations[i + 1]
+        directions = gmaps.directions(origin, destination, mode="driving", units="imperial")
+        if directions:
+            distance_miles = directions[0]['legs'][0]['distance']['value'] * 0.000621371  # Convert meters to miles
+            total_distance += distance_miles
+    return total_distance
+    
+def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times,full_distance):
 
     loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
@@ -106,9 +122,17 @@ pdf_text = extract_text_from_pdf(file_name)
     load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
 ) = apply_regex_rules(pdf_text)
 
+# Calculate the driving distance between locations
+if pick_up and consignee_location:
+    all_locations = [pick_up] + consignee_location
+    full_distance = calculate_driving_distance(all_locations)
+else:
+    full_distance = None
+
+
 # Save the result to Firebase
 save_result_to_firebase(
-    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
+    load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times, full_distance
 )
 
 sys.exit()
