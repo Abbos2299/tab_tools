@@ -25,7 +25,7 @@ most_used_broker = sys.argv[2]
 file_name = sys.argv[3]
 
 # Initialize Google Maps client
-google_maps_api_key = 'YOUR_API_KEY'  # Replace with your Google Maps API key
+google_maps_api_key = 'AIzaSyAwKbIHeqAYrgDWY9m7Oa-XNMW1kqqe5To'
 gmaps = googlemaps.Client(key=google_maps_api_key)
 
 def extract_text_from_pdf(file_path):
