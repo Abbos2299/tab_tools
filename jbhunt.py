@@ -95,7 +95,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'Status': 'Active',
         'Path': timestamp,
         'Submit BOL': 'no',
-        'Submit POD': 'no',
         'Broker Update': 'no',
     })
     
