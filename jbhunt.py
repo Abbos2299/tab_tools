@@ -14,7 +14,8 @@ import googlemaps
 timestamp = datetime.now().strftime("%y%m%d%H%M%S")
 
 # Initialize Firebase credentials
-cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
+cred = credentials.Certificate(
+    'tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
 
 # Get a Firestore client
@@ -27,6 +28,7 @@ file_name = sys.argv[3]
 # Initialize Google Maps client
 google_maps_api_key = 'AIzaSyAwKbIHeqAYrgDWY9m7Oa-XNMW1kqqe5To'
 gmaps = googlemaps.Client(key=google_maps_api_key)
+
 
 def extract_text_from_pdf(file_path):
     resource_manager = PDFResourceManager()
@@ -42,6 +44,7 @@ def extract_text_from_pdf(file_path):
     output_stream.close()
     return text
 
+
 def apply_regex_rules(text):
     load_number = re.search(r'Carrier Confirmation for Load (.+)', text)
     rate = re.search(r'Total Rate:(.+)', text)
@@ -49,14 +52,16 @@ def apply_regex_rules(text):
     load_miles = re.search(r'Load Details\n(.+)', text)
     broker_email_address = broker_email.group(1) if broker_email else None
     if broker_email_address:
-        email_match = re.search(r'Email:\s?([\w\.-]+@[\w\.-]+)', broker_email_address)
+        email_match = re.search(
+            r'Email:\s?([\w\.-]+@[\w\.-]+)', broker_email_address)
         if email_match:
             broker_email_address = email_match.group(1)
         elif re.match(r'^[\w\.-]+@[\w\.-]+$', broker_email_address):
             pass
         else:
             broker_email_address = None
-    pick_up_info = re.search(r'Shipper\s?:?\s?1\n(.+?)\n(.+?)\n(.+?)\n', text, re.DOTALL)
+    pick_up_info = re.search(
+        r'Shipper\s?:?\s?1\n(.+?)\n(.+?)\n(.+?)\n', text, re.DOTALL)
     pick_up = ' '.join(pick_up_info.groups()) if pick_up_info else None
     pick_up_time = re.search(r'Pickup\n(.+)', text)
     pick_up_t = pick_up_time.group(1) if pick_up_time else None
@@ -78,26 +83,31 @@ def apply_regex_rules(text):
         consignee_location,
         delivery_times,
     )
-    
+
+
 def calculate_driving_distance(locations):
     total_distance = 0.0
     for i in range(len(locations) - 1):
         origin = locations[i]
         destination = locations[i + 1]
-        directions = gmaps.directions(origin, destination, mode="driving", units="imperial")
+        directions = gmaps.directions(
+            origin, destination, mode="driving", units="imperial")
         if directions:
-            distance_miles = directions[0]['legs'][0]['distance']['value'] * 0.000621371  # Convert meters to miles
+            # Convert meters to miles
+            distance_miles = directions[0]['legs'][0]['distance']['value'] * 0.000621371
             total_distance += distance_miles
     return total_distance
-    
-def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times,full_distance):
+
+
+def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times, full_distance):
 
     loads_ref = db.collection('users').document(user_uid).collection('Loads')
 
     # Create a new load document
     load_doc_ref = loads_ref.document(timestamp)
 
-    full_distance_int = int(full_distance) if full_distance is not None else None
+    full_distance_int = int(
+        full_distance) if full_distance is not None else None
 
     # Save the extracted information to the load document
     load_doc_ref.set({
@@ -114,8 +124,22 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'Path': timestamp,
         'Submit BOL': 'no',
         'Broker Update': 'no',
+        'Driver': user_uid,
     })
-    
+
+# After saving the result to Firebase, add the timestamp field to the user's document
+def add_timestamp_field_to_user_document(user_uid, timestamp):
+    user_doc_ref = db.collection('load_group').document(user_uid)
+
+    # Update the document with the timestamp field
+    user_doc_ref.update({
+        timestamp: 'Load'
+    })
+
+# Call the function to add the timestamp field
+add_timestamp_field_to_user_document(user_uid, timestamp)
+
+
 # Extract text from the PDF
 pdf_text = extract_text_from_pdf(file_name)
 
