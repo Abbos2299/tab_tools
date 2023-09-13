@@ -127,18 +127,25 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'Driver': user_uid,
     })
 
-# After saving the result to Firebase, add the timestamp field to the user's document
 def add_timestamp_field_to_user_document(user_uid, timestamp):
     user_doc_ref = db.collection('load_group').document(user_uid)
 
-    # Update the document with the timestamp field
-    user_doc_ref.update({
-        timestamp: 'Load'
-    })
+    # Check if the document exists
+    user_doc = user_doc_ref.get()
+
+    if user_doc.exists:
+        # Update the document with the timestamp field
+        user_doc_ref.update({
+            timestamp: 'Load'
+        })
+    else:
+        # If the document doesn't exist, create it and set the timestamp field
+        user_doc_ref.set({
+            timestamp: 'Load'
+        })
 
 # Call the function to add the timestamp field
 add_timestamp_field_to_user_document(user_uid, timestamp)
-
 
 # Extract text from the PDF
 pdf_text = extract_text_from_pdf(file_name)
