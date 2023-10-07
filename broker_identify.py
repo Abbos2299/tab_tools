@@ -10,8 +10,10 @@ import requests
 import time
 import urllib.parse
 import os
-from pdfminer.high_level import extract_text  # Import PDFMiner
+import pytesseract
+from pdf2image import convert_from_path
 import re
+from docquery import document, pipeline
 
 app = Flask(__name__)
 cred = credentials.Certificate(
@@ -33,21 +35,28 @@ def launch_python_file():
     time.sleep(1)
 
     # Iterate over the blobs and get the last added file
-   last_added_blob = None
+    last_added_blob = None
     for blob in blobs:
         if not last_added_blob or blob.updated > last_added_blob.updated:
             last_added_blob = blob
 
     if last_added_blob:
-        file_name = urllib.parse.unquote(last_added_blob.name.split('/')[-1])
-        file_url = last_added_blob.generate_signed_url(expiration=timedelta(minutes=15))
+        file_name = urllib.parse.unquote(last_added_blob.name.split(
+            '/')[-1])  # Get the file name from the blob URL
+        file_url = last_added_blob.generate_signed_url(
+            expiration=timedelta(minutes=15))
 
+        # Download the file from Firebase
         response = requests.get(file_url)
         with open(file_name, 'wb') as f:
             f.write(response.content)
 
-        # Process the downloaded PDF file with PDFMiner
-        all_text = extract_text(file_name)
+        # Process the downloaded file with Pytesseract
+        images = convert_from_path(file_name)
+        all_text = ""
+        for i, image in enumerate(images):
+            text = pytesseract.image_to_string(image)
+            all_text += text
 
         # print(all_text)
         # List of broker companies
