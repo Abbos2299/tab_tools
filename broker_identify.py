@@ -10,10 +10,8 @@ import requests
 import time
 import urllib.parse
 import os
-import pytesseract
-from pdf2image import convert_from_path
+from pdfminer.high_level import extract_text  # Import PDFMiner
 import re
-from docquery import document, pipeline
 
 app = Flask(__name__)
 cred = credentials.Certificate(
@@ -52,11 +50,8 @@ def launch_python_file():
             f.write(response.content)
 
         # Process the downloaded file with Pytesseract
-        images = convert_from_path(file_name)
-        all_text = ""
-        for i, image in enumerate(images):
-            text = pytesseract.image_to_string(image)
-            all_text += text
+                all_text = extract_text(file_name)
+
 
         # print(all_text)
         # List of broker companies
