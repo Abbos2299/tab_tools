@@ -13,7 +13,6 @@ import os
 import pytesseract
 from pdf2image import convert_from_path
 import re
-from docquery import document, pipeline
 
 app = Flask(__name__)
 cred = credentials.Certificate(
