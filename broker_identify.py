@@ -50,7 +50,7 @@ def launch_python_file():
             f.write(response.content)
 
         # Process the downloaded file with Pytesseract
-                all_text = extract_text(file_name)
+            all_text = extract_text(file_name)
 
 
         # print(all_text)
