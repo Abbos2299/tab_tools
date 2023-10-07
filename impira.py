@@ -1,6 +1,6 @@
 from docquery import document, pipeline
 p = pipeline('document-question-answering')
-doc = document.load_document("8B49232.pdf")
+doc = document.load_document("1643751.pdf")
 for q in ["What is the load number?",
           "What is broker Email?",
           "What is Pick up location?",
@@ -11,5 +11,3 @@ for q in ["What is the load number?",
     result = p(question=q, **doc.context)
     answer = result[0]['answer'] if result else 'No answer found'
     print(answer)
-
-
