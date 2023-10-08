@@ -23,8 +23,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 user_uid = sys.argv[1]
-most_used_broker = sys.argv[2]
-file_name = sys.argv[3]
+file_name = sys.argv[2]
 
 # Initialize Google Maps client
 google_maps_api_key = 'AIzaSyAwKbIHeqAYrgDWY9m7Oa-XNMW1kqqe5To'
@@ -44,66 +43,6 @@ def extract_text_from_pdf(file_path):
     device.close()
     output_stream.close()
     return text
-
-def parse_date_range(date_range):
-    # Define a list of common date formats to be used in regular expressions
-    date_formats = [
-        r'%m/%d/%Y',
-        r'%d/%m/%Y',
-        r'%Y/%d/%m',
-        r'%Y/%m/%d',
-        r'%B %d, %Y',
-        r'%b %d, %Y',
-        r'%b. %d, %Y',
-        r'%b, %d, %Y',
-        r'%m/%d/%Y',
-        r'%d/%m/%Y',
-        r'%Y/%d/%m',
-        r'%Y/%m/%d',
-        r'%m/%d/%Y',
-        r'%Y/%d/%m',
-        r'%Y/%m/%d',
-        r'%m%d%Y',
-        r'%d%m%Y',
-        r'%Y%m%d',
-        r'%b%d%Y',
-        r'%b.%d%Y',
-        r'%b %d%Y',
-        r'%d%b %Y',
-        r'%d%b.%Y',
-        r'%d%b%Y',
-        r'%d %B, %Y',
-        r'%Y, %B %d',
-        r'%b %d, %Y',
-        r'%d %b, %Y',
-        r'%Y, %b %d',
-    ]
-
-    for date_format in date_formats:
-        try:
-            match = re.match(date_format, date_range)
-            if match:
-                parsed_date = parser.parse(match.group(0))
-                return parsed_date
-        except ValueError:
-            pass
-
-    return None
-
-
-while True:
-    input_date_range = input("Enter a date/time range (or 'q' to quit): ")
-
-    if input_date_range.lower() == 'q':
-        break
-
-    start_date_parsed = parse_date_range(input_date_range)
-
-    if start_date_parsed:
-        print("Parsed Start Date/Time:", start_date_parsed)
-    else:
-        print("Unable to parse the input as a date/time range format.")
-
 
 
 def apply_regex_rules(text):
@@ -188,7 +127,6 @@ def save_result_to_firebase(load_number, rate, broker_email, load_miles, pick_up
         'Driver': user_uid,
     })
 
-
 def add_timestamp_field_to_user_document(user_uid, timestamp):
     user_doc_ref = db.collection('load_group').document(user_uid)
 
@@ -206,7 +144,6 @@ def add_timestamp_field_to_user_document(user_uid, timestamp):
             timestamp: 'Load'
         })
 
-
 # Call the function to add the timestamp field
 add_timestamp_field_to_user_document(user_uid, timestamp)
 
@@ -217,12 +154,6 @@ pdf_text = extract_text_from_pdf(file_name)
 (
     load_number, rate, broker_email, load_miles, pick_up, pick_up_t, consignee_location, delivery_times
 ) = apply_regex_rules(pdf_text)
-
-
-pick_up_t_parsed = parse_date_range(pick_up_t)
-
-delivery_times_parsed = [parse_date_range(dt) for dt in delivery_times]
-
 
 # Calculate the driving distance between locations
 if pick_up and consignee_location:
