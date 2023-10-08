@@ -46,13 +46,25 @@ def extract_text_from_pdf(file_path):
     return file_text
 
 def extract_information(text):
-    # Initialize DocQuery pipeline with the space URL
-    docquery_pipe = pipeline("tableqa", model="https://huggingface.co/spaces/impira/docquery", use_auth_token=True)
+    # Initialize DocQuery pipeline
+    docquery_pipe = pipeline("tableqa", model="impira/docquery", use_auth_token=True)
 
     # Extract information using DocQuery
     answers = docquery_pipe(text, questions)
 
     return answers
+
+def perform_document_question_answering(doc, questions):
+    # Initialize the document-question-answering pipeline
+    docqa_pipeline = pipeline('document-question-answering')
+
+    results = []
+
+    for question in questions:
+        result = docqa_pipeline(question=question, **doc.context)
+        results.append(result)
+
+    return results
 
 # Extract text from the PDF file
 file_text = extract_text_from_pdf(file_name)
@@ -60,10 +72,15 @@ file_text = extract_text_from_pdf(file_name)
 # Extract information from the extracted text
 answers = extract_information(file_text)
 
+# Perform document question answering
+results = perform_document_question_answering(answers, questions)
+
 # Print the answers
 print("DocQuery Answers:")
-for question, answer in zip(questions, answers):
-    print(f"{question}: {answer}")
+for i, (question, answer) in enumerate(zip(questions, results)):
+    print(f"Question {i+1}: {question}")
+    print(f"Answer: {answer['answer']}")
+    print()
 
 # Exit the script
 sys.exit()
