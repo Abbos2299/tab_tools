@@ -57,10 +57,12 @@ def launch_python_file():
 
     return 'Success'
 
+
 def extract_text_from_pdf(pdf_path):
     """
     Extract text from a PDF file using pdfminer.
     """
+    print(f"Extracting text from PDF: {pdf_path}")  # Debug output
     rsrcmgr = PDFResourceManager()
     retstr = io.StringIO()
     codec = 'utf-8'
@@ -81,15 +83,11 @@ def extract_text_from_pdf(pdf_path):
     device.close()
     retstr.close()
 
-    # Print the extracted text
+    # Print the extracted text for debugging
     print("Extracted Text:")
     print(text)
 
-    # Set text to None to release memory
-    text = None
-
     return text
-
 
 
 @app.route('/locationcheck', methods=['GET'])
