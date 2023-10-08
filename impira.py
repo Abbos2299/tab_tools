@@ -46,8 +46,8 @@ def extract_text_from_pdf(file_path):
     return file_text
 
 def extract_information(text):
-    # Initialize DocQuery pipeline
-    docquery_pipe = pipeline("tableqa", model="impira/docquery", use_auth_token=True)
+    # Initialize DocQuery pipeline with the space URL
+    docquery_pipe = pipeline("tableqa", model="https://huggingface.co/spaces/impira/docquery", use_auth_token=True)
 
     # Extract information using DocQuery
     answers = docquery_pipe(text, questions)
