@@ -48,7 +48,7 @@ def launch_python_file():
                 if text.lower().count("j.b. hunt") > 1:
                     broker_name = "J. B. Hunt Transportation"
                     break  # Exit the loop as we've identified the broker
-                    
+
     # If broker_name is identified, launch jbhunt.py
     if broker_name:
         subprocess.call([sys.executable, "jbhunt.py", user_uid, broker_name])
@@ -85,7 +85,11 @@ def extract_text_from_pdf(pdf_path):
     print("Extracted Text:")
     print(text)
 
+    # Set text to None to release memory
+    text = None
+
     return text
+
 
 
 @app.route('/locationcheck', methods=['GET'])
