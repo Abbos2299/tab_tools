@@ -1,3 +1,4 @@
+from datetime import timedelta
 import subprocess
 import sys
 import tempfile
@@ -12,6 +13,9 @@ from pdfminer.pdfpage import PDFPage
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 import io
+import requests
+
+import urllib3
 
 
 app = Flask(__name__)
@@ -33,21 +37,30 @@ def launch_python_file():
     time.sleep(1)
 
     broker_name = None  # Initialize broker_name
+    last_added_blob = None
 
     for blob in blobs:
-        if blob.name.lower().endswith('.pdf'):
-            # Create a temporary file to save the PDF content
-            with tempfile.NamedTemporaryFile(suffix=".pdf") as temp_pdf_file:
-                # Download the PDF content to the temporary file
-                blob.download_to_filename(temp_pdf_file.name)
+        if not last_added_blob or blob.updated > last_added_blob.updated:
+            last_added_blob = blob
 
-                # Extract text from the PDF using pdfminer
-                text = extract_text_from_pdf(temp_pdf_file.name)
+    if last_added_blob:
+        file_name = urllib3.parse.unquote(last_added_blob.name.split(
+            '/')[-1])  # Get the file name from the blob URL
+        file_url = last_added_blob.generate_signed_url(
+            expiration=timedelta(minutes=15))
+        
+        # Download the file from Firebase
+        response = requests.get(file_url)
+        with open(file_name, 'wb') as f:
+            f.write(response.content)
+
+     
+            # Extract text from the PDF using pdfminer
+            text = extract_text_from_pdf(file_name)
 
                 # Check if "J.B. Hunt" appears more than once in the text
-                if text.lower().count("j.b. hunt") > 1:
+            if text.lower().count("j.b. hunt") > 1:
                     broker_name = "J. B. Hunt Transportation"
-                    break  # Exit the loop as we've identified the broker
 
     # If broker_name is identified, launch jbhunt.py
     if broker_name:
