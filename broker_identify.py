@@ -68,6 +68,11 @@ def extract_text_from_pdf(pdf_path):
     text = retstr.getvalue()
     device.close()
     retstr.close()
+
+    # Print the extracted text
+    print("Extracted Text:")
+    print(text)
+
     return text
 
 
