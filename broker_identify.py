@@ -31,6 +31,9 @@ def launch_python_file():
     blobs = bucket.list_blobs(prefix=folder_name)
 
     time.sleep(1)
+
+    broker_name = None  # Initialize broker_name
+
     for blob in blobs:
         if blob.name.lower().endswith('.pdf'):
             # Create a temporary file to save the PDF content
@@ -41,7 +44,17 @@ def launch_python_file():
                 # Extract text from the PDF using pdfminer
                 text = extract_text_from_pdf(temp_pdf_file.name)
 
-                # Process the extracted text as needed
+                # Check if "J.B. Hunt" appears more than once in the text
+                if text.lower().count("j.b. hunt") > 1:
+                    broker_name = "J. B. Hunt Transportation"
+                    break  # Exit the loop as we've identified the broker
+
+    # If broker_name is identified, launch jbhunt.py
+    if broker_name:
+        subprocess.call([sys.executable, "jbhunt.py", user_uid, broker_name])
+    else:
+        print("Broker not identified")
+
     return 'Success'
 
 
