@@ -1,21 +1,23 @@
-from datetime import timedelta
 import subprocess
 import sys
-import tempfile
 from flask import Flask, request
 import firebase_admin
 from firebase_admin import credentials
+from firebase_admin import firestore
 from firebase_admin import storage
+from datetime import timedelta
+import requests
 import time
 import os
+import re
+import io
+import urllib.parse
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
-import io
-import requests
 
-import urllib3
+
 
 
 app = Flask(__name__)
@@ -44,7 +46,7 @@ def launch_python_file():
             last_added_blob = blob
 
     if last_added_blob:
-        file_name = urllib3.parse.unquote(last_added_blob.name.split(
+        file_name = urllib.parse.unquote(last_added_blob.name.split(
             '/')[-1])  # Get the file name from the blob URL
         file_url = last_added_blob.generate_signed_url(
             expiration=timedelta(minutes=15))
