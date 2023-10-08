@@ -9,6 +9,10 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import sys
+from docquery import pipeline
+
+model_name = "impira/docquery"  
+docquery_pipe = pipeline("tableqa", model=model_name, use_auth_token=True)
 
 # Define the questions here
 questions = [
