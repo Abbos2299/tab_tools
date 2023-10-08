@@ -51,20 +51,8 @@ def launch_python_file():
                     print("RC didn't identify")
                     subprocess.call([sys.executable, "impira.py",
                                      user_uid])
-
-
-
-    # Correct the identified broker company names if needed
-    if most_used_broker == "J.B. Hunt":
-        most_used_broker = "J. B. Hunt Transportation"
-        subprocess.call([sys.executable, "jbhunt.py",
-                         user_uid, most_used_broker])
-    else:
-        print("RC don't identified")
-        subprocess.call([sys.executable, "impira.py",
-                         user_uid])
-
     return 'Success'
+
 
 def extract_text_from_pdf(pdf_path):
     """
@@ -90,6 +78,7 @@ def extract_text_from_pdf(pdf_path):
     device.close()
     retstr.close()
     return text
+
 
 @app.route('/locationcheck', methods=['GET'])
 def location_check():
