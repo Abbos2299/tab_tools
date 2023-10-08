@@ -70,7 +70,7 @@ questions = [
 ]
 
 # Replace 'all_text' with the path to your PDF file
-file_path = 'path_to_your_pdf_file.pdf'
+file_path = extract_text_from_pdf(file_name)
 file_text = extract_text_from_pdf(file_path)
 
 answers = extract_information(file_text)
@@ -79,7 +79,5 @@ for question, answer in zip(questions, answers):
     print(f"{question}: {answer}")
 
 
-
-pdf_text = extract_text_from_pdf(file_name)
-
 sys.exit()
+# Note: You can also create a Flask route to receive a PDF file and extract information from it.
