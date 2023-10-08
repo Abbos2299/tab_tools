@@ -5,6 +5,24 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.pdfpage import PDFPage
 import io
 import json
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import sys
+
+
+# Initialize Firebase credentials
+cred = credentials.Certificate(
+    'tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
+firebase_admin.initialize_app(cred)
+
+# Get a Firestore client
+db = firestore.client()
+
+user_uid = sys.argv[1]
+file_name = sys.argv[2]
+
+
 
 def extract_text_from_pdf(file_path):
     resource_manager = PDFResourceManager()
@@ -60,4 +78,8 @@ print("DocQuery Answers:")
 for question, answer in zip(questions, answers):
     print(f"{question}: {answer}")
 
-# Note: You can also create a Flask route to receive a PDF file and extract information from it.
+
+
+pdf_text = extract_text_from_pdf(file_name)
+
+sys.exit()
