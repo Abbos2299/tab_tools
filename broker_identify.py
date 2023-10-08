@@ -42,15 +42,6 @@ def launch_python_file():
                 text = extract_text_from_pdf(temp_pdf_file.name)
 
                 # Process the extracted text as needed
-                # You can replace this with your logic
-                if most_used_broker == "J.B. Hunt":
-                    most_used_broker = "J. B. Hunt Transportation"
-                    subprocess.call([sys.executable, "jbhunt.py",
-                                     user_uid, most_used_broker])
-                else:
-                    print("RC didn't identify")
-                    subprocess.call([sys.executable, "impira.py",
-                                     user_uid])
     return 'Success'
 
 
