@@ -1,4 +1,4 @@
-from docquery import document, pipeline
+from docquery import pipeline
 import pdfminer
 from pdfminer.converter import TextConverter
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
@@ -9,10 +9,6 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
 import sys
-from docquery import pipeline
-
-model_name = "impira/docquery"  
-docquery_pipe = pipeline("tableqa", model=model_name, use_auth_token=True)
 
 # Define the questions here
 questions = [
@@ -51,7 +47,7 @@ def extract_text_from_pdf(file_path):
 
 def extract_information(text):
     # Initialize DocQuery pipeline
-    docquery_pipe = pipeline("tableqa")
+    docquery_pipe = pipeline("tableqa", model="impira/docquery", use_auth_token=True)
 
     # Extract information using DocQuery
     answers = docquery_pipe(text, questions)
