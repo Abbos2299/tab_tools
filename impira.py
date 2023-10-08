@@ -10,10 +10,19 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 import sys
 
+# Define the questions here
+questions = [
+    "What is the load number?",
+    "What is broker Email?",
+    "What is Pick up location?",
+    "What is Pick up date?",
+    "What is the Delivery location?",
+    "What is Delivery date?",
+    "What is the Total amount?"
+]
 
 # Initialize Firebase credentials
-cred = credentials.Certificate(
-    'tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
+cred = credentials.Certificate('tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
 firebase_admin.initialize_app(cred)
 
 # Get a Firestore client
@@ -21,8 +30,6 @@ db = firestore.client()
 
 user_uid = sys.argv[1]
 file_name = sys.argv[2]
-
-
 
 def extract_text_from_pdf(file_path):
     resource_manager = PDFResourceManager()
@@ -39,17 +46,6 @@ def extract_text_from_pdf(file_path):
     return file_text
 
 def extract_information(text):
-    # Define the questions to ask
-    questions = [
-        "What is the load number?",
-        "What is broker Email?",
-        "What is Pick up location?",
-        "What is Pick up date?",
-        "What is the Delivery location?",
-        "What is Delivery date?",
-        "What is the Total amount?"
-    ]
-
     # Initialize DocQuery pipeline
     docquery_pipe = pipeline("tableqa")
 
@@ -58,26 +54,16 @@ def extract_information(text):
 
     return answers
 
-# Define the questions here
-questions = [
-    "What is the load number?",
-    "What is broker Email?",
-    "What is Pick up location?",
-    "What is Pick up date?",
-    "What is the Delivery location?",
-    "What is Delivery date?",
-    "What is the Total amount?"
-]
+# Extract text from the PDF file
+file_text = extract_text_from_pdf(file_name)
 
-# Replace 'all_text' with the path to your PDF file
-file_path = extract_text_from_pdf(file_name)
-file_text = extract_text_from_pdf(file_path)
-
+# Extract information from the extracted text
 answers = extract_information(file_text)
+
+# Print the answers
 print("DocQuery Answers:")
 for question, answer in zip(questions, answers):
     print(f"{question}: {answer}")
 
-
+# Exit the script
 sys.exit()
-# Note: You can also create a Flask route to receive a PDF file and extract information from it.
