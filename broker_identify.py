@@ -57,7 +57,6 @@ def launch_python_file():
 
     return 'Success'
 
-
 def extract_text_from_pdf(pdf_path):
     """
     Extract text from a PDF file using pdfminer.
