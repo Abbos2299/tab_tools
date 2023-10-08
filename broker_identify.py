@@ -66,7 +66,9 @@ def launch_python_file():
 
     # If broker_name is identified, launch jbhunt.py
     if broker_name:
-        subprocess.call([sys.executable, "jbhunt.py", user_uid, broker_name])
+        subprocess.call([sys.executable, "jbhunt.py",
+                                user_uid, file_name])
+
     else:
         print("Broker not identified")
 
