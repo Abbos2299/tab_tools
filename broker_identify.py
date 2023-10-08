@@ -18,8 +18,6 @@ from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 
 
-
-
 app = Flask(__name__)
 cred = credentials.Certificate(
     'tab-tools-firebase-adminsdk-8ncav-4f5ccee9af.json')
@@ -50,27 +48,28 @@ def launch_python_file():
             '/')[-1])  # Get the file name from the blob URL
         file_url = last_added_blob.generate_signed_url(
             expiration=timedelta(minutes=15))
-        
+
         # Download the file from Firebase
         response = requests.get(file_url)
         with open(file_name, 'wb') as f:
             f.write(response.content)
 
-     
             # Extract text from the PDF using pdfminer
             text = extract_text_from_pdf(file_name)
 
-                # Check if "J.B. Hunt" appears more than once in the text
+            # Check if "J.B. Hunt" appears more than once in the text
             if text.lower().count("j.b. hunt") > 1:
-                    broker_name = "J. B. Hunt Transportation"
+                broker_name = "J. B. Hunt Transportation"
 
     # If broker_name is identified, launch jbhunt.py
     if broker_name:
         subprocess.call([sys.executable, "jbhunt.py",
-                                user_uid, file_name])
+                         user_uid, file_name])
 
     else:
         print("Broker not identified")
+        subprocess.call([sys.executable, "impira.py",
+                         user_uid, file_name])
 
     return 'Success'
 
