@@ -49,6 +49,8 @@ def launch_python_file():
                     broker_name = "J. B. Hunt Transportation"
                     break  # Exit the loop as we've identified the broker
 
+            os.remove(temp_pdf_file.name)
+
     # If broker_name is identified, launch jbhunt.py
     if broker_name:
         subprocess.call([sys.executable, "jbhunt.py", user_uid, broker_name])
