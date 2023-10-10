@@ -1,13 +1,13 @@
-from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
+from transformers import pipeline
+question_answerer = pipeline("question-answering", model='distilbert-base-uncased-distilled-squad')
 
-model_name = "deepset/roberta-base-squad2"
+context = r"""
+Extractive Question Answering is the task of extracting an answer from a text given a question. An example     of a
+question answering dataset is the SQuAD dataset, which is entirely based on that task. If you would like to fine-tune
+a model on a SQuAD task, you may leverage the examples/pytorch/question-answering/run_squad.py script.
+"""
 
-# a) Get predictions
-nlp = pipeline('question-answering', model=model_name, tokenizer=model_name)
-QA_input = {
-    'question': 'Why is model conversion important?',
-    'context': 'The option to convert models between FARM and transformers gives freedom to the user and let people easily switch between frameworks.'
-}
-res = nlp(QA_input)
-
-print(res['answer'])
+result = question_answerer(question="What is a good example of a question answering dataset?",     context=context)
+print(
+f"Answer: '{result['answer']}', score: {round(result['score'], 4)}, start: {result['start']}, end: {result['end']}"
+)
